@@ -12,6 +12,10 @@
  * Date: 18th February 2010
  */
 
+goog.provide('jPlayer');
+
+goog.require('jQuery');
+
 (function($) {
 
 	// Adapted from ui.core.js (1.7.2)

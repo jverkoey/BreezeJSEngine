@@ -14,44 +14,56 @@
  * limitations under the License.
  */
 
+goog.provide('Breeze.Engine.Director');
+
+goog.require('Breeze.Engine');
+
+goog.require('goog.math.Vec2');
+goog.require('goog.object');
+
+/**
+ * @param {Object.<string, *>} options
+ * @constructor
+ */
 Breeze.Engine.Director = function(options) {
   var defaults = {
     scenes : null
   };
 
-  var settings = $.extend({}, defaults, options);
+  var settings = {};
+  goog.object.extend(settings, defaults, options);
   
-  this._scenes = settings.scenes;
+  this.scenes_ = settings.scenes;
 
-  for (var key in this._scenes) {
-    var scene = this._scenes[key];
+  for (var key in this.scenes_) {
+    var scene = this.scenes_[key];
     scene.registerOnLoad(this.onLoadScene.bind(this, key));
   }
 
-  this._activeScene = null;
+  this.activeScene_ = null;
   this.mousePos = {x: 0, y: 0},
 
   Breeze.Engine.Director.sharedDirector = this;
 };
 
 Object.extend(Breeze.Engine.Director, {
-  sharedDirector : null,
+  sharedDirector : null
 });
 
 Breeze.Engine.Director.prototype = {
 
   present : function(sceneID) {
-    if (!this._activeScene) {
-      this._activeScene = sceneID;
+    if (!this.activeScene_) {
+      this.activeScene_ = sceneID;
     } else {
-      this._scenes[this._activeScene].stopScene();
-      this._activeScene = sceneID;
-      this._scenes[this._activeScene].runScene();
+      this.scenes_[this.activeScene_].stopScene();
+      this.activeScene_ = sceneID;
+      this.scenes_[this.activeScene_].runScene();
     }
   },
 
   getMousePos : function() {
-    return new Breeze.Math.Vector2D(this.mousePos.x, this.mousePos.y);
+    return new goog.math.Vec2(this.mousePos.x, this.mousePos.y);
   },
 
   mouseMove : function(event) {
@@ -59,15 +71,16 @@ Breeze.Engine.Director.prototype = {
   },
 
   click : function(event) {
-    if (this._activeScene) {
-      this._scenes[this._activeScene].click(new Breeze.Math.Vector2D(event.layerX, event.layerY));
+    if (this.activeScene_) {
+      this.scenes_[this.activeScene_].click(new goog.math.Vec2(event.layerX, event.layerY));
     }
   },
 
   onLoadScene : function(sceneID) {
-    if (sceneID == this._activeScene) {
-      this._scenes[this._activeScene].runScene();
+    if (sceneID == this.activeScene_) {
+      this.scenes_[this.activeScene_].runScene();
     }
   }
 
 };
+

@@ -14,4 +14,8 @@
  * limitations under the License.
  */
 
+goog.provide('Breeze.Engine');
+
+goog.require('Breeze');
+
 Breeze.Engine = {};

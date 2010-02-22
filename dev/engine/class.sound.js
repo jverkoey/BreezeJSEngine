@@ -14,33 +14,39 @@
  * limitations under the License.
  */
 
+goog.provide('Breeze.Engine.Sound');
+
+goog.require('Breeze.Engine');
+goog.require('jQuery');
+goog.require('jPlayer');
+goog.require('Modernizr');
+
 /**
  * Creating a Sound object will create a jPlayer object, load the data, and then call the optional
  * callback method once the sound is loaded.
  *
  * @param path    string     The sound URL.
+ * @constructor
  */
 Breeze.Engine.Sound = function(path, options) {
   var defaults = {
     'repeats' : false
   };
 
-  var settings = $.extend({}, defaults, options);
+  var settings = {};
+  goog.object.extend(settings, defaults, options);
 
   this._loaded = false;
 
-  var audioHolder = $('<div>');
-  $('body').append(audioHolder);
-
-  var audio = new Audio();
-  var oggSupport = audio.canPlayType("audio/ogg").match(/maybe|probably/i);
-  var mp3Support = audio.canPlayType("audio/mp3").match(/maybe|probably/i);
+  var audioHolder = window.jQuery('<div>');
+  // We have to add the element to the page for jPlayer to work correctly.
+  window.jQuery('body').append(audioHolder);
 
   // oggSupport: false, mp3Support: true is the only way to get sound working in Chrome.
   // oggSupport: true, mp3Support: * is the only way to get sound working in Firefox.
 
   audioHolder.jPlayer({
-    oggSupport: oggSupport && !mp3Support,
+    oggSupport: Modernizr.audio.ogg && !Modernizr.audio.mp3,
     mp3Support: true,
     ready: function () {
       audioHolder

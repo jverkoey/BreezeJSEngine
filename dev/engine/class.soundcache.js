@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+goog.provide('Breeze.Engine.SoundCache');
+
+goog.require('Breeze.Engine');
+
+/**
+ * @constructor
+ */
 Breeze.Engine.SoundCache = function(sound_info) {
   this._cache = {};
 

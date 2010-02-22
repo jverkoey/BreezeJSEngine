@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+goog.provide('Breeze.Engine.Sprite');
+
+goog.require('Breeze.Engine');
+
+/**
+ * @constructor
+ */
 Breeze.Engine.Sprite = function(options) {
   var defaults = {
     image: null,
@@ -22,15 +29,16 @@ Breeze.Engine.Sprite = function(options) {
     height: 0
   };
 
-  var settings = $.extend({}, defaults, options);
+  var settings = {};
+  goog.object.extend(settings, defaults, options);
 
   this.x = 0;
   this.y = 0;
   this._image = settings.image;
   this._width = settings.width;
   this._height = settings.height;
-  this._nCols = parseInt(settings.image.width / settings.width);
-  this._nRows = parseInt(settings.image.height / settings.height);
+  this._nCols = parseInt(settings.image.width / settings.width, 10);
+  this._nRows = parseInt(settings.image.height / settings.height, 10);
   this._animations = settings.animations;
 
   this._frame = 0;
@@ -44,9 +52,9 @@ Breeze.Engine.Sprite.prototype = {
 
   draw : function(context) {
     context.save();
-    context.translate(parseInt(-this._width / 2), parseInt(-this._height / 2));
+    context.translate(parseInt(-this._width / 2, 10), parseInt(-this._height / 2, 10));
     var tx = (this._frame % this._nCols) * this._width;
-    var ty = parseInt(this._frame / this._nCols) * this._height;
+    var ty = parseInt(this._frame / this._nCols, 10) * this._height;
     context.drawImage(this._image, tx, ty, this._width, this._height,
                                    this.x, this.y, this._width, this._height);
     context.restore();

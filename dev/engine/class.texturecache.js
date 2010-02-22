@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+goog.provide('Breeze.Engine.TextureCache');
+
+goog.require('Breeze.Engine');
+
 /**
  * The texture cache holds all textures and fires notifications when groups of
  * textures are finished loading.
@@ -23,6 +27,7 @@
  *   'palmtree' : '/gfx/palmtree.png',
  *   'beach'    : '/gfx/beach.png'
  * }
+ * @constructor
  */
 Breeze.Engine.TextureCache = function(texture_info) {
   this._cache = {};
@@ -111,6 +116,6 @@ Breeze.Engine.TextureCache.prototype = {
       // Everything's already loaded, ship it.
       callback();
     }
-  },
+  }
 
 };

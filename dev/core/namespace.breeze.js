@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+goog.provide('Breeze');
+
 /**
  * Welcome to Breeze.
  *
@@ -47,16 +49,6 @@ Object.extend = function(destination, source) {
     destination[property] = source[property];
   }
   return destination;
-};
-
-Object.inherit = function(subClass, superClass) {
-  function inheritance() {}
-  inheritance.prototype = superClass.prototype;
-
-  subClass.prototype = new inheritance();
-  subClass.prototype.constructor = subClass;
-  subClass.baseConstructor = superClass;
-  subClass.superClass = superClass.prototype;
 };
 
 Object.extend(Function.prototype, {

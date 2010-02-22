@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+goog.provide('Breeze.Engine.Texture');
+
+goog.require('Breeze.Engine');
+
 /**
  * Creating a Texture object will create an Image object, load the data, and then call the optional
  * callback method once the image is loaded.
@@ -21,13 +25,15 @@
  * @param path    string     The image URL.
  * @param options dictionary
  *                   - didLoad(texture) method called when the image has been loaded
+ * @constructor
  */
 Breeze.Engine.Texture = function(path, options) {
   var defaults = {
     'didLoad' : null
   };
 
-  var settings = $.extend({}, defaults, options);
+  var settings = {};
+  goog.object.extend(settings, defaults, options);
 
   this._loaded = false;
   this._didLoad = settings.didLoad;

@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+goog.provide('Breeze.Engine.Scene');
+
+goog.require('Breeze.Engine');
+
+/**
+ * @constructor
+ */
 Breeze.Engine.Scene = function(options) {
   var defaults = {
     textureCache: null,
@@ -21,7 +28,8 @@ Breeze.Engine.Scene = function(options) {
     context: null
   };
 
-  var settings = $.extend({}, defaults, options);
+  var settings = {};
+  goog.object.extend(settings, defaults, options);
 
   this._textureCache = settings.textureCache;
   this._soundCache = settings.soundCache;
@@ -48,7 +56,9 @@ Breeze.Engine.Scene.prototype = {
 
   runScene : function() {
     this._lastTick = new Date();
-    this._timeout = setInterval(Breeze.Engine.Scene.prototype.animate.bind(this), parseInt(1000 / Breeze.Engine.Scene.GOAL_FPS));
+    this._timeout = window.setInterval(
+      Breeze.Engine.Scene.prototype.animate.bind(this),
+      parseInt(1000 / Breeze.Engine.Scene.GOAL_FPS, 10));
   },
 
   stopScene : function() {
