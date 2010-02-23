@@ -17,6 +17,7 @@
 goog.provide('Breeze.Engine.TextureCache');
 
 goog.require('Breeze.Engine');
+goog.require('Breeze.Engine.Texture');
 
 /**
  * The texture cache holds all textures and fires notifications when groups of
@@ -119,3 +120,5 @@ Breeze.Engine.TextureCache.prototype = {
   }
 
 };
+
+goog.exportSymbol('Breeze.Engine.TextureCache', Breeze.Engine.TextureCache);

@@ -17,6 +17,7 @@
 goog.provide('Breeze.Engine.Sprite');
 
 goog.require('Breeze.Engine');
+goog.require('Breeze.Engine.Texture');
 
 /**
  * @constructor

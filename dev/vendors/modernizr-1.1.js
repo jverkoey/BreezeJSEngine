@@ -30,11 +30,6 @@
  * @contributor   Ben Alman
  */
 
-goog.provide('Modernizr');
-goog.provide('Modernizr.audio');
-goog.provide('Modernizr.audio.ogg');
-goog.provide('Modernizr.audio.mp3');
-
 window.Modernizr = (function(window,doc){
     
     var version = '1.1',

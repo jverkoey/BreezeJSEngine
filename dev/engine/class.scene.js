@@ -17,6 +17,9 @@
 goog.provide('Breeze.Engine.Scene');
 
 goog.require('Breeze.Engine');
+goog.require('Breeze.Engine.Sound');
+goog.require('Breeze.Engine.SoundCache');
+goog.require('Breeze.Engine.TextureCache');
 
 /**
  * @constructor
@@ -31,7 +34,11 @@ Breeze.Engine.Scene = function(options) {
   var settings = {};
   goog.object.extend(settings, defaults, options);
 
-  this._textureCache = settings.textureCache;
+  /**
+   * Texture cache
+   * @type {Breeze.Engine.TextureCache}
+   */
+  this.textureCache_ = settings.textureCache;
   this._soundCache = settings.soundCache;
   this._ctx = settings.context;
 

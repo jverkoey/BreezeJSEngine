@@ -17,9 +17,6 @@
 goog.provide('Breeze.Engine.Sound');
 
 goog.require('Breeze.Engine');
-goog.require('jQuery');
-goog.require('jPlayer');
-goog.require('Modernizr');
 
 /**
  * Creating a Sound object will create a jPlayer object, load the data, and then call the optional
@@ -38,6 +35,7 @@ Breeze.Engine.Sound = function(path, options) {
 
   this._loaded = false;
 
+/*
   var audioHolder = window.jQuery('<div>');
   // We have to add the element to the page for jPlayer to work correctly.
   window.jQuery('body').append(audioHolder);
@@ -59,32 +57,32 @@ Breeze.Engine.Sound = function(path, options) {
     audioHolder.jPlayer("onSoundComplete", function() {
       this.element.jPlayer("play"); // Auto-Repeat
     });
-  }
+  }*/
 
-  this._audio = audioHolder;
+  //this._audio = audioHolder;
 };
 
 Breeze.Engine.Sound.prototype = {
 
   play : function() {
-    this._audio.jPlayer("play");
+    //this._audio.jPlayer("play");
   },
 
   stop : function() {
-    this._audio.jPlayer("stop");
+    //this._audio.jPlayer("stop");
   },
 
   setVolume : function(perc) {
-    this._audio.jPlayer("volume", perc * 100);
+    //this._audio.jPlayer("volume", perc * 100);
   },
 
   getPlayedTime : function() {
-    return this._playedTime;
+    //return this._playedTime;
   },
 
   onProgressChange : function(loadPercent, playedPercentRelative, playedPercentAbsolute, playedTime, totalTime) {
-    this._playedTime = playedTime;
-    this._totalTime = totalTime;
+    //this._playedTime = playedTime;
+    //this._totalTime = totalTime;
   }
 
 };

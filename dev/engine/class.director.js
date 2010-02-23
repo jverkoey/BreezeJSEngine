@@ -17,6 +17,7 @@
 goog.provide('Breeze.Engine.Director');
 
 goog.require('Breeze.Engine');
+goog.require('Breeze.Engine.Scene');
 
 goog.require('goog.math.Vec2');
 goog.require('goog.object');
@@ -67,12 +68,12 @@ Breeze.Engine.Director.prototype = {
   },
 
   mouseMove : function(event) {
-    this.mousePos = {x: event.layerX, y:event.layerY};
+    this.mousePos = {x: event.offsetX, y:event.offsetY};
   },
 
   click : function(event) {
     if (this.activeScene_) {
-      this.scenes_[this.activeScene_].click(new goog.math.Vec2(event.layerX, event.layerY));
+      this.scenes_[this.activeScene_].click(new goog.math.Vec2(event.offsetX, event.offsetY));
     }
   },
 
@@ -84,3 +85,4 @@ Breeze.Engine.Director.prototype = {
 
 };
 
+goog.exportSymbol('Breeze.Engine.Director', Breeze.Engine.Director);

@@ -39,3 +39,5 @@ Breeze.Engine.SoundCache.prototype = {
   }
 
 };
+
+goog.exportSymbol('Breeze.Engine.SoundCache', Breeze.Engine.SoundCache);
