@@ -19,6 +19,7 @@ goog.provide('Breeze.Engine.Director');
 goog.require('Breeze.Engine');
 goog.require('Breeze.Engine.Scene');
 
+goog.require('goog.style');
 goog.require('goog.math.Vec2');
 goog.require('goog.object');
 
@@ -28,13 +29,18 @@ goog.require('goog.object');
  */
 Breeze.Engine.Director = function(options) {
   var defaults = {
-    scenes : null
+    scenes : null,
+    canvas : null
   };
 
   var settings = {};
   goog.object.extend(settings, defaults, options);
   
   this.scenes_ = settings.scenes;
+  this.canvas_ = settings.canvas;
+
+  goog.events.listen(this.canvas_, goog.events.EventType.MOUSEMOVE, this.mouseMove.bind(this));
+  goog.events.listen(this.canvas_, goog.events.EventType.CLICK, this.click.bind(this));
 
   for (var key in this.scenes_) {
     var scene = this.scenes_[key];
@@ -68,12 +74,18 @@ Breeze.Engine.Director.prototype = {
   },
 
   mouseMove : function(event) {
-    this.mousePos = {x: event.offsetX, y:event.offsetY};
+    this.mousePos = {
+      x:event.clientX - this.canvas_.offsetLeft,
+      y:event.clientY - this.canvas_.offsetTop
+    };
   },
 
   click : function(event) {
     if (this.activeScene_) {
-      this.scenes_[this.activeScene_].click(new goog.math.Vec2(event.offsetX, event.offsetY));
+      this.scenes_[this.activeScene_].click(
+        new goog.math.Vec2(
+          event.clientX - this.canvas_.offsetLeft,
+          event.clientY - this.canvas_.offsetTop));
     }
   },
 
