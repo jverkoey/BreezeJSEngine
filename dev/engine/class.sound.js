@@ -60,17 +60,21 @@ Breeze.Engine.Sound = function(path, options) {
 };
 
 Breeze.Engine.Sound.prototype.play = function() {
-  if (Modernizr.audio) {
-    this.audio_.play();
+  if (this.audio_) {
+    //this.audio_.play();
   }
 };
 
 Breeze.Engine.Sound.prototype.stop = function() {
-  this.audio_.pause();
+  if (this.audio_) {
+    this.audio_.pause();
+  }
 };
 
 Breeze.Engine.Sound.prototype.setVolume = function(perc) {
-  this._audio.volume = perc;
+  if (this.audio_) {
+    this.audio_.volume = perc;
+  }
 };
 
 Breeze.Engine.Sound.prototype.getPlayedTime = function() {
