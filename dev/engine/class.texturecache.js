@@ -34,26 +34,30 @@ Breeze.Engine.TextureCache = function(texture_info) {
 
   /**
    * @type {Object.<string, Breeze.Engine.Texture>}
+   * @private
    */
   this.cache_ = {};
 
   /**
    * @type {Object.<string, *>}
+   * @private
    */
   this.requirers_ = [];
 
   /**
    * @type {number}
+   * @private
    */
-  this._numLoaded = 0;
+  this.numLoaded_ = 0;
 
   /**
    * @type {number}
+   * @private
    */
-  this._numTextures = 0;
+  this.numTextures_ = 0;
 
   for (var key in texture_info) {
-    this._numTextures++;
+    this.numTextures_++;
 
     /**
      * @type {string}
@@ -63,78 +67,77 @@ Breeze.Engine.TextureCache = function(texture_info) {
   }
 };
 
-Breeze.Engine.TextureCache.prototype = {
-
-  /**
-   * Callback: called once the texture has been loaded.
-   * @param key       String                The texture key.
-   * @param texture   Breeze.Engine.Texture The texture object.
-   */
-  didLoad : function(key, texture) {
-    var newrequirers = [];
-    for (var i in this.requirers_) {
-      var requirer = this.requirers_[i];
-      delete requirer['keys'][key];
-      var isFinished = true;
-      for (var keys in requirer.keys) {
-        isFinished = false;
-        break;
-      }
-      if (isFinished) {
-        requirer['callback']();
-      } else {
-        newrequirers.push(requirer);
-      }
+/**
+ * Callback: called once the texture has been loaded.
+ * @param key       String                The texture key.
+ * @param texture   Breeze.Engine.Texture The texture object.
+ */
+Breeze.Engine.TextureCache.prototype.didLoad = function(key, texture) {
+  var newrequirers = [];
+  for (var i in this.requirers_) {
+    var requirer = this.requirers_[i];
+    delete requirer['keys'][key];
+    var isFinished = true;
+    for (var keys in requirer.keys) {
+      isFinished = false;
+      break;
     }
-    this.requirers_ = newrequirers;
-    this._numLoaded++;
-  },
-
-  /**
-   * Retrieve a loaded texture object, or null otherwise.
-   * @return {Breeze.Engine.Texture|null}
-   */
-  getTexture : function(key) {
-    if (this.cache_[key].isLoaded()) {
-      return this.cache_[key];
-    }
-
-    return null;
-  },
-
-  /**
-   * Require a set of textures to be loaded. This is the recommended way to require a batch of
-   * images for a particular scene.
-   *
-   * Example:
-   * this._textureCache.requireTextures([
-   *   'palmtree',
-   *   'beach'
-   * ], this.didLoadTextures.bind(this));
-   *
-   */
-  requireTextures : function(keys, callback) {
-    var any_missing = false;
-
-    var required_keys = {};
-    for (var i in keys) {
-      var key = keys[i];
-      if (!this.getTexture(key)) {
-        required_keys[key] = true;
-        any_missing = true;
-      }
-    }
-
-    if (any_missing) {
-      this.requirers_.push({
-        'keys' : required_keys,
-        'callback' : callback
-      });
-
+    if (isFinished) {
+      requirer['callback']();
     } else {
-      // Everything's already loaded, ship it.
-      callback();
+      newrequirers.push(requirer);
+    }
+  }
+  this.requirers_ = newrequirers;
+  this.numLoaded_++;
+};
+
+/**
+ * Retrieve a loaded texture object, or null otherwise.
+ * @param {string} key
+ * @return {Breeze.Engine.Texture|null}
+ */
+Breeze.Engine.TextureCache.prototype.getTexture = function(key) {
+  if (this.cache_[key].isLoaded()) {
+    return this.cache_[key];
+  }
+
+  return null;
+};
+
+/**
+ * Require a set of textures to be loaded. This is the recommended way to require a batch of
+ * images for a particular scene.
+ *
+ * Example:
+ * this._textureCache.requireTextures([
+ *   'palmtree',
+ *   'beach'
+ * ], this.didLoadTextures.bind(this));
+ *
+ * @param {Array.<string>}  keys
+ * @param {function()}      callback
+ */
+Breeze.Engine.TextureCache.prototype.requireTextures = function(keys, callback) {
+  var any_missing = false;
+
+  var required_keys = {};
+  for (var i in keys) {
+    var key = keys[i];
+    if (!this.getTexture(key)) {
+      required_keys[key] = true;
+      any_missing = true;
     }
   }
 
+  if (any_missing) {
+    this.requirers_.push({
+      'keys' : required_keys,
+      'callback' : callback
+    });
+
+  } else {
+    // Everything's already loaded, ship it.
+    callback();
+  }
 };
