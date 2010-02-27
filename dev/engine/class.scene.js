@@ -111,6 +111,10 @@ Breeze.Engine.Scene.prototype = {
       callback();
     }
     this.onLoadCallbacks_ = null;
+  },
+
+  isLoaded : function() {
+    return this.isLoaded_;
   }
 
 };
