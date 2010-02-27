@@ -21,6 +21,7 @@ goog.require('Breeze.Engine.Scene');
 
 goog.require('goog.math.Vec2');
 goog.require('goog.object');
+goog.require('goog.events.KeyHandler');
 
 /**
  * The director object is responsible for all scenes in the game. This responsibility includes
@@ -62,6 +63,8 @@ Breeze.Engine.Director = function(options) {
    */
   this.mousePos_ = new goog.math.Vec2();
 
+  var keyHandler = new goog.events.KeyHandler(document);
+  goog.events.listen(keyHandler, goog.events.KeyHandler.EventType.KEY, this.keyPress.bind(this));
   goog.events.listen(this.canvas_, goog.events.EventType.MOUSEMOVE, this.mouseMove.bind(this));
   goog.events.listen(this.canvas_, goog.events.EventType.CLICK, this.click.bind(this));
 
@@ -118,6 +121,15 @@ Breeze.Engine.Director.prototype.click = function(event) {
       new goog.math.Vec2(
         event.offsetX - this.canvas_.offsetLeft,
         event.offsetY - this.canvas_.offsetTop));
+  }
+};
+
+/**
+ * Event callback for key presses.
+ */
+Breeze.Engine.Director.prototype.keyPress = function(event) {
+  if (this.activeSceneID_) {
+    this.scenes_[this.activeSceneID_].keyPress(event);
   }
 };
 
