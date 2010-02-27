@@ -22,6 +22,10 @@ goog.require('Breeze.Engine.SoundCache');
 goog.require('Breeze.Engine.TextureCache');
 
 /**
+ * A scene object that is responsible for ensuring textures and sounds are loaded, as well as
+ * setting up the animation timer and rendering layers.
+ *
+ * @param {Object.<string, *>} options
  * @constructor
  */
 Breeze.Engine.Scene = function(options) {
@@ -35,86 +39,135 @@ Breeze.Engine.Scene = function(options) {
   goog.object.extend(settings, defaults, options);
 
   /**
-   * Texture cache
    * @type {Breeze.Engine.TextureCache}
+   * @private
    */
   this.textureCache_ = settings.textureCache;
+
+  /**
+   * @type {Breeze.Engine.SoundCache}
+   * @private
+   */
   this.soundCache_ = settings.soundCache;
+
   this.ctx_ = settings.context;
 
+  /**
+   * @type {number}
+   * @private
+   */
   this.firstLayer_ = 0;
+
+  /**
+   * @type {number}
+   * @private
+   */
   this.lastLayer_ = 0;
 
+  /**
+   * @type {Date}
+   * @private
+   */
   this.lastTick_ = new Date();
 
+  /**
+   * @type {boolean}
+   * @private
+   */
   this.isLoaded_ = false;
 
+  /**
+   * @type Array.<function()>
+   * @private
+   */
   this.onLoadCallbacks_ = [];
 
+  /**
+   * @type {number|null}
+   * @private
+   */
   this.timeout_ = null;
 };
 
-Object.extend(Breeze.Engine.Scene, {
-  GOAL_FPS        : 30, // The desired frames per second.
-  MAX_TIME_DELTA  : 50 // The maximum time delta for a given tick.
-});
+Breeze.Engine.Scene.GOAL_FPS = 30; // The desired frames per second.
+Breeze.Engine.Scene.MAX_TIME_DELTA = 50; // The maximum time delta for a given tick.
 
-Breeze.Engine.Scene.prototype = {
+/**
+ * Kick off the animation timer for the scene.
+ */
+Breeze.Engine.Scene.prototype.runScene = function() {
+  this.lastTick_ = new Date();
+  this.timeout_ = window.setInterval(
+    Breeze.Engine.Scene.prototype.animate.bind(this),
+    parseInt(1000 / Breeze.Engine.Scene.GOAL_FPS, 10));
+};
 
-  runScene : function() {
-    this.lastTick_ = new Date();
-    this.timeout_ = window.setInterval(
-      Breeze.Engine.Scene.prototype.animate.bind(this),
-      parseInt(1000 / Breeze.Engine.Scene.GOAL_FPS, 10));
-  },
+/**
+ * Kill the animation timer for the scene.
+ */
+Breeze.Engine.Scene.prototype.stopScene = function() {
+  clearTimeout(this.timeout_);
+  this.timeout_ = null;
+};
 
-  stopScene : function() {
-    clearTimeout(this.timeout_);
-    this.timeout_ = null;
-  },
+/**
+ * Draw a layered scene.
+ */
+Breeze.Engine.Scene.prototype.drawScene = function() {
+  this.ctx_.clearRect(0,0,this.ctx_.canvas.width,this.ctx_.canvas.height);
 
-  drawScene : function() {
-    this.ctx_.clearRect(0,0,this.ctx_.canvas.width,this.ctx_.canvas.height);
+  for (var i = this.firstLayer_; i <= this.lastLayer_; ++i) {
+    var oldAlpha = this.ctx_.globalAlpha;
 
-    for (var i = this.firstLayer_; i <= this.lastLayer_; ++i) {
-      var oldAlpha = this.ctx_.globalAlpha;
+    this.drawLayer(i);
 
-      this.drawLayer(i);
-
-      this.ctx_.globalAlpha = oldAlpha;
-    }
-  },
-
-  animate : function() {
-    var currentTick = new Date();
-    var deltaMS = Math.min(Breeze.Engine.Scene.MAX_TIME_DELTA, currentTick.getTime() - this.lastTick_);
-
-    this.tick(deltaMS / 1000);
-
-    this.lastTick_ = currentTick;
-
-    Breeze.Engine.Scene.prototype.drawScene.call(this);
-  },
-
-  registerOnLoad : function(callback) {
-    if (this.isLoaded_) {
-      callback();
-    } else {
-      this.onLoadCallbacks_.push(callback);
-    }
-  },
-
-  didLoad : function() {
-    this.isLoaded_ = true;
-    for (var i in this.onLoadCallbacks_) {
-      var callback = this.onLoadCallbacks_[i];
-      callback();
-    }
-    this.onLoadCallbacks_ = null;
-  },
-
-  isLoaded : function() {
-    return this.isLoaded_;
+    this.ctx_.globalAlpha = oldAlpha;
   }
+};
 
+/**
+ * Callback for the animation event.
+ */
+Breeze.Engine.Scene.prototype.animate = function() {
+  var currentTick = new Date();
+  var deltaMS = Math.min(Breeze.Engine.Scene.MAX_TIME_DELTA, currentTick.getTime() - this.lastTick_);
+
+  this.tick(deltaMS / 1000);
+
+  this.lastTick_ = currentTick;
+
+  Breeze.Engine.Scene.prototype.drawScene.call(this);
+};
+
+/**
+ * Register a callback that will be executed upon successfully loading this scene.
+ * If the scene is already loaded, executes the callback immediately.
+ *
+ * @param {function()} callback
+ */
+Breeze.Engine.Scene.prototype.registerOnLoad = function(callback) {
+  if (this.isLoaded_) {
+    callback();
+  } else {
+    this.onLoadCallbacks_.push(callback);
+  }
+};
+
+/**
+ * Callback for successfully loading the scene.
+ */
+Breeze.Engine.Scene.prototype.didLoad = function() {
+  this.isLoaded_ = true;
+  for (var i in this.onLoadCallbacks_) {
+    var callback = this.onLoadCallbacks_[i];
+    callback();
+  }
+  this.onLoadCallbacks_ = null;
+};
+
+/**
+ * @return {boolean} Whether or not the scene has successfully completed loading.
+ */
+Breeze.Engine.Scene.prototype.isLoaded = function() {
+  return this.isLoaded_;
 };
