@@ -28,21 +28,3 @@ Breeze.Math = {};
 Breeze.Math.chopRemainder = function(x) {
   return parseInt(x, 10);
 };
-
-
-/**
- * Calculate the floating point modulus of x by y.
- * Note: This function isn't incredibly accurate.
- *
- * @param {number} x
- * @param {number} y
- * @return {number} x % y (floating point)
- */
-Breeze.Math.modf = function(x, y) {
-  var quotient = x / y;
-  var remainder = (quotient - Breeze.Math.chopRemainder(quotient)) * y;
-  if (remainder < 0) {
-    remainder += y;
-  }
-  return remainder;
-};
