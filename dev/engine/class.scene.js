@@ -110,6 +110,14 @@ Breeze.Engine.Scene.prototype.stopScene = function() {
   this.timeout_ = null;
 };
 
+Breeze.Engine.Scene.prototype.img = function(key) {
+  return this.textureCache_.getTexture(key).getImage();
+};
+
+Breeze.Engine.Scene.prototype.sound = function(key) {
+  return this.soundCache_.getSound(key);
+};
+
 /**
  * Draw a layered scene.
  */
