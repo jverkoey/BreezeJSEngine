@@ -1,0 +1,2 @@
+function Modernizr(window, doc){};
+
