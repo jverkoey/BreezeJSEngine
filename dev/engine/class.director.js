@@ -57,7 +57,7 @@ Breeze.Engine.Director = function(options) {
   this.activeSceneID_ = null;
 
   /**
-   * @type {goog.math.Vec2}
+   * @type {!goog.math.Vec2}
    * @private
    */
   this.mousePos_ = new goog.math.Vec2();
@@ -93,7 +93,7 @@ Breeze.Engine.Director.prototype.present = function(sceneID) {
 };
 
 /**
- * @return {goog.math.Vec2} The current position of the mouse in window coordinates.
+ * @return {!goog.math.Vec2} The current position of the mouse in window coordinates.
  */
 Breeze.Engine.Director.prototype.getMousePos = function() {
   return this.mousePos_;
