@@ -25,21 +25,21 @@ Breeze.Engine.SoundCache = function(sound_info) {
 
   /**
    * @type {Object.<string, Breeze.Engine.Sound>}
+   * @private
    */
-  this._cache = {};
+  this.cache_ = {};
 
   for (var key in sound_info) {
     var details = sound_info[key];
-    this._cache[key] = new Breeze.Engine.Sound(details.path, {
+    this.cache_[key] = new Breeze.Engine.Sound(details.path, {
       repeats: details.repeats || false
     });
   }
 };
 
-Breeze.Engine.SoundCache.prototype = {
-
-  getSound : function(key) {
-    return this._cache[key];
-  }
-
+/**
+ * @return {Breeze.Engine.Sound}
+ */
+Breeze.Engine.SoundCache.prototype.getSound = function(key) {
+  return this.cache_[key];
 };
