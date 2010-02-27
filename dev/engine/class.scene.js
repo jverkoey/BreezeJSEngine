@@ -39,19 +39,19 @@ Breeze.Engine.Scene = function(options) {
    * @type {Breeze.Engine.TextureCache}
    */
   this.textureCache_ = settings.textureCache;
-  this._soundCache = settings.soundCache;
-  this._ctx = settings.context;
+  this.soundCache_ = settings.soundCache;
+  this.ctx_ = settings.context;
 
-  this._firstLayer = 0;
-  this._lastLayer = 0;
+  this.firstLayer_ = 0;
+  this.lastLayer_ = 0;
 
-  this._lastTick = new Date();
+  this.lastTick_ = new Date();
 
-  this._isLoaded = false;
+  this.isLoaded_ = false;
 
-  this._onLoadCallbacks = [];
+  this.onLoadCallbacks_ = [];
 
-  this._timeout = null;
+  this.timeout_ = null;
 };
 
 Object.extend(Breeze.Engine.Scene, {
@@ -62,55 +62,55 @@ Object.extend(Breeze.Engine.Scene, {
 Breeze.Engine.Scene.prototype = {
 
   runScene : function() {
-    this._lastTick = new Date();
-    this._timeout = window.setInterval(
+    this.lastTick_ = new Date();
+    this.timeout_ = window.setInterval(
       Breeze.Engine.Scene.prototype.animate.bind(this),
       parseInt(1000 / Breeze.Engine.Scene.GOAL_FPS, 10));
   },
 
   stopScene : function() {
-    clearTimeout(this._timeout);
-    this._timeout = null;
+    clearTimeout(this.timeout_);
+    this.timeout_ = null;
   },
 
   drawScene : function() {
-    this._ctx.clearRect(0,0,this._ctx.canvas.width,this._ctx.canvas.height);
+    this.ctx_.clearRect(0,0,this.ctx_.canvas.width,this.ctx_.canvas.height);
 
-    for (var i = this._firstLayer; i <= this._lastLayer; ++i) {
-      var oldAlpha = this._ctx.globalAlpha;
+    for (var i = this.firstLayer_; i <= this.lastLayer_; ++i) {
+      var oldAlpha = this.ctx_.globalAlpha;
 
       this.drawLayer(i);
 
-      this._ctx.globalAlpha = oldAlpha;
+      this.ctx_.globalAlpha = oldAlpha;
     }
   },
 
   animate : function() {
     var currentTick = new Date();
-    var deltaMS = Math.min(Breeze.Engine.Scene.MAX_TIME_DELTA, currentTick.getTime() - this._lastTick);
+    var deltaMS = Math.min(Breeze.Engine.Scene.MAX_TIME_DELTA, currentTick.getTime() - this.lastTick_);
 
     this.tick(deltaMS / 1000);
 
-    this._lastTick = currentTick;
+    this.lastTick_ = currentTick;
 
     Breeze.Engine.Scene.prototype.drawScene.call(this);
   },
 
   registerOnLoad : function(callback) {
-    if (this._isLoaded) {
+    if (this.isLoaded_) {
       callback();
     } else {
-      this._onLoadCallbacks.push(callback);
+      this.onLoadCallbacks_.push(callback);
     }
   },
 
   didLoad : function() {
-    this._isLoaded = true;
-    for (var i in this._onLoadCallbacks) {
-      var callback = this._onLoadCallbacks[i];
+    this.isLoaded_ = true;
+    for (var i in this.onLoadCallbacks_) {
+      var callback = this.onLoadCallbacks_[i];
       callback();
     }
-    this._onLoadCallbacks = null;
+    this.onLoadCallbacks_ = null;
   }
 
 };
