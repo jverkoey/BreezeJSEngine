@@ -40,50 +40,41 @@ Breeze.Engine.Sound = function(path, options) {
    */
   this.loaded_ = false;
 
-/*
-  var audioHolder = window.jQuery('<div>');
-  // We have to add the element to the page for jPlayer to work correctly.
-  window.jQuery('body').append(audioHolder);
+  if (Modernizr.audio) {
+    this.audio_ = document.createElement('audio');
 
-  // oggSupport: false, mp3Support: true is the only way to get sound working in Chrome.
-  // oggSupport: true, mp3Support: * is the only way to get sound working in Firefox.
+    if (settings.repeats) {
+      this.audio_.addEventListener("ended", function() {
+        this.audio_.play();
+      }.bind(this), true);
+    }
 
-  audioHolder.jPlayer({
-    oggSupport: Modernizr.audio.ogg && !Modernizr.audio.mp3,
-    mp3Support: true,
-    ready= function () {
-      audioHolder
-      .jPlayer("onProgressChange", this.onProgressChange.bind(this))
-      .jPlayer("setFile", path+'.mp3', path+'.ogg');
-    }.bind(this)
-  });
-
-  if (settings.repeats) {
-    audioHolder.jPlayer("onSoundComplete", function() {
-      this.element.jPlayer("play"); // Auto-Repeat
-    });
-  }*/
-
-  //this._audio = audioHolder;
+    if (this.audio_.canPlayType('audio/mp3')) {
+      this.audio_.setAttribute('src', path+'.mp3');
+    } else if (this.audio_.canPlayType('audio/ogg')) {
+      this.audio_.setAttribute('src', path+'.ogg');
+    } else {
+      // No supported file formats.
+    }
+  }
 };
 
 Breeze.Engine.Sound.prototype.play = function() {
-  //this._audio.jPlayer("play");
+  if (Modernizr.audio) {
+    this.audio_.play();
+  }
 };
 
 Breeze.Engine.Sound.prototype.stop = function() {
-  //this._audio.jPlayer("stop");
+  this.audio_.pause();
 };
 
 Breeze.Engine.Sound.prototype.setVolume = function(perc) {
-  //this._audio.jPlayer("volume", perc * 100);
+  this._audio.volume = perc;
 };
 
 Breeze.Engine.Sound.prototype.getPlayedTime = function() {
-  //return this._playedTime;
 };
 
 Breeze.Engine.Sound.prototype.onProgressChange = function(loadPercent, playedPercentRelative, playedPercentAbsolute, playedTime, totalTime) {
-  //this._playedTime = playedTime;
-  //this._totalTime = totalTime;
 };
