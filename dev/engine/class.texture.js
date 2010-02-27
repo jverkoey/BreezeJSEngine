@@ -29,47 +29,50 @@ goog.require('Breeze.Engine');
 Breeze.Engine.Texture = function(path, didLoad) {
   /**
    * @type {boolean}
+   * @private
    */
   this.loaded_ = false;
 
   /**
    * @type {function(Breeze.Engine.Texture)}
+   * @private
    */
   this.didLoad_ = didLoad;
 
   var img = new Image();
   img.onload = this.didLoadTexture.bind(this);
-  this._img = img;
+
+  /**
+   * @type {Image}
+   * @private
+   */
+  this.img_ = img;
 
   // Start loading the image.
   img.src = path;
 };
 
-Breeze.Engine.Texture.prototype = {
+/**
+ * @return {boolean}
+ */
+Breeze.Engine.Texture.prototype.isLoaded = function() {
+  return this.loaded_;
+};
 
-  /**
-   * @return {boolean}
-   */
-  isLoaded        : function() {
-    return this.loaded_;
-  },
+/**
+ * @return {Image}
+ */
+Breeze.Engine.Texture.prototype.getImage = function() {
+  return this.img_;
+};
 
-  /**
-   * @return {Image}
-   */
-  getImage        : function() {
-    return this._img;
-  },
+/**
+ * @param {Image} image
+ */
+Breeze.Engine.Texture.prototype.didLoadTexture = function(image) {
+  this.loaded_ = true;
 
-  /**
-   * @param {Image} image
-   */
-  didLoadTexture : function(image) {
-    this.loaded_ = true;
-
-    if (this.didLoad_) {
-      this.didLoad_(this);
-    }
+  if (this.didLoad_) {
+    this.didLoad_(this);
   }
-
 };
