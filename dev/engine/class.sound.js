@@ -22,7 +22,8 @@ goog.require('Breeze.Engine');
  * Creating a Sound object will create a jPlayer object, load the data, and then call the optional
  * callback method once the sound is loaded.
  *
- * @param path    string     The sound URL.
+ * @param {string}              path        The URL of the sound.
+ * @param {Object.<string, *>}  options
  * @constructor
  */
 Breeze.Engine.Sound = function(path, options) {
@@ -33,7 +34,11 @@ Breeze.Engine.Sound = function(path, options) {
   var settings = {};
   goog.object.extend(settings, defaults, options);
 
-  this._loaded = false;
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.loaded_ = false;
 
 /*
   var audioHolder = window.jQuery('<div>');
@@ -46,7 +51,7 @@ Breeze.Engine.Sound = function(path, options) {
   audioHolder.jPlayer({
     oggSupport: Modernizr.audio.ogg && !Modernizr.audio.mp3,
     mp3Support: true,
-    ready: function () {
+    ready= function () {
       audioHolder
       .jPlayer("onProgressChange", this.onProgressChange.bind(this))
       .jPlayer("setFile", path+'.mp3', path+'.ogg');
@@ -62,27 +67,23 @@ Breeze.Engine.Sound = function(path, options) {
   //this._audio = audioHolder;
 };
 
-Breeze.Engine.Sound.prototype = {
+Breeze.Engine.Sound.prototype.play = function() {
+  //this._audio.jPlayer("play");
+};
 
-  play : function() {
-    //this._audio.jPlayer("play");
-  },
+Breeze.Engine.Sound.prototype.stop = function() {
+  //this._audio.jPlayer("stop");
+};
 
-  stop : function() {
-    //this._audio.jPlayer("stop");
-  },
+Breeze.Engine.Sound.prototype.setVolume = function(perc) {
+  //this._audio.jPlayer("volume", perc * 100);
+};
 
-  setVolume : function(perc) {
-    //this._audio.jPlayer("volume", perc * 100);
-  },
+Breeze.Engine.Sound.prototype.getPlayedTime = function() {
+  //return this._playedTime;
+};
 
-  getPlayedTime : function() {
-    //return this._playedTime;
-  },
-
-  onProgressChange : function(loadPercent, playedPercentRelative, playedPercentAbsolute, playedTime, totalTime) {
-    //this._playedTime = playedTime;
-    //this._totalTime = totalTime;
-  }
-
+Breeze.Engine.Sound.prototype.onProgressChange = function(loadPercent, playedPercentRelative, playedPercentAbsolute, playedTime, totalTime) {
+  //this._playedTime = playedTime;
+  //this._totalTime = totalTime;
 };
