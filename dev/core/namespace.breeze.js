@@ -16,6 +16,8 @@
 
 goog.provide('Breeze');
 
+goog.require('goog.math.Matrix');
+
 /**
  * Welcome to Breeze.
  *

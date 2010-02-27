@@ -19,7 +19,6 @@ goog.provide('Breeze.Engine.Director');
 goog.require('Breeze.Engine');
 goog.require('Breeze.Engine.Scene');
 
-goog.require('goog.style');
 goog.require('goog.math.Vec2');
 goog.require('goog.object');
 
