@@ -86,13 +86,13 @@ Breeze.Engine.Sprite = function(options) {
    * @type {number}
    * @private
    */
-  this.frame_ = 0;
+  this.textureFrame_ = 0;
 
   /**
-   * @type {number}
+   * @type {Date}
    * @private
    */
-  this.frameTickStart_ = 0;
+  this.frameTickStart_ = new Date();
 
   /**
    * @type {number}
@@ -107,25 +107,33 @@ Breeze.Engine.Sprite = function(options) {
   this.currentAnimation_ = null;
 };
 
+/**
+ * Draw the sprite's current frame to the given context.
+ * @param {Object} context
+ */
 Breeze.Engine.Sprite.prototype.draw = function(context) {
   context.save();
   context.translate(parseInt(-this.width_ / 2, 10), parseInt(-this.height_ / 2, 10));
-  var tx = (this.frame_ % this.nCols_) * this.width_;
-  var ty = parseInt(this.frame_ / this.nCols_, 10) * this.height_;
+  var tx = (this.textureFrame_ % this.nCols_) * this.width_;
+  var ty = parseInt(this.textureFrame_ / this.nCols_, 10) * this.height_;
   context.drawImage(this.image_, tx, ty, this.width_, this.height_,
                                  this.x, this.y, this.width_, this.height_);
   context.restore();
 };
 
+/**
+ * Animate the sprite.
+ * @param {number} deltaSeconds
+ */
 Breeze.Engine.Sprite.prototype.tick = function(deltaSeconds) {
   if (this.currentAnimation_) {
     var animation = this.animations_[this.currentAnimation_];
     var animationFrame = animation.frames[this.animationFrameIndex_];
     var animationTime = animation.times[this.animationFrameIndex_];
-    this.frame_ = animationFrame;
-    if ((new Date() - this.frame_TickStart) > animationTime) {
+    this.textureFrame_ = animationFrame;
+    if ((new Date() - this.frameTickStart_) > animationTime) {
       this.animationFrameIndex_++;
-      this.frame_TickStart = new Date();
+      this.frameTickStart_ = new Date();
 
       // Check for the end of the animation.
       if (this.animationFrameIndex_ == animation.frames.length) {
@@ -139,9 +147,13 @@ Breeze.Engine.Sprite.prototype.tick = function(deltaSeconds) {
   }
 };
 
-Breeze.Engine.Sprite.prototype.animate = function(animation) {
+/**
+ * Set the animation to be performed.
+ * @param {string} animation
+ */
+Breeze.Engine.Sprite.prototype.setAnimation = function(animation) {
   this.currentAnimation_ = animation;
   this.animationFrameIndex_ = 0;
-  this.frame_ = this.animations_[this.currentAnimation_].frames[this.animationFrameIndex_];
-  this.frame_TickStart = new Date();
+  this.textureFrame_ = this.animations_[this.currentAnimation_].frames[this.animationFrameIndex_];
+  this.frameTickStart_ = new Date();
 };
