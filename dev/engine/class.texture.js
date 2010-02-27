@@ -34,7 +34,7 @@ Breeze.Engine.Texture = function(path, didLoad) {
   this.loaded_ = false;
 
   /**
-   * @type {function(Breeze.Engine.Texture)}
+   * @type {function(Breeze.Engine.Texture)|null}
    * @private
    */
   this.didLoad_ = didLoad;
@@ -74,5 +74,6 @@ Breeze.Engine.Texture.prototype.didLoadTexture = function(image) {
 
   if (this.didLoad_) {
     this.didLoad_(this);
+    this.didLoad_ = null;
   }
 };
