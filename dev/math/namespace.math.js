@@ -37,7 +37,7 @@ Breeze.Math.chopRemainder = function(x) {
  * @return {number}
  */
 Breeze.Math.easeIn = function(t) {
-  return x * x;
+  return t * t;
 };
 
 /**
