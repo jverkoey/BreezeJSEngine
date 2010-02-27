@@ -126,10 +126,12 @@ Breeze.Engine.Scene.prototype.drawScene = function() {
 
   for (var i = this.firstLayer_; i <= this.lastLayer_; ++i) {
     var oldAlpha = this.ctx_.globalAlpha;
+    var oldFillStyle = this.ctx_.fillStyle;
 
     this.drawLayer(i);
 
     this.ctx_.globalAlpha = oldAlpha;
+    this.ctx_.fillStyle = oldFillStyle;
   }
 };
 
