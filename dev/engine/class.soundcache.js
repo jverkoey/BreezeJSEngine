@@ -22,6 +22,10 @@ goog.require('Breeze.Engine');
  * @constructor
  */
 Breeze.Engine.SoundCache = function(sound_info) {
+
+  /**
+   * @type {Object.<string, Breeze.Engine.Sound>}
+   */
   this._cache = {};
 
   for (var key in sound_info) {
@@ -39,5 +43,3 @@ Breeze.Engine.SoundCache.prototype = {
   }
 
 };
-
-goog.exportSymbol('Breeze.Engine.SoundCache', Breeze.Engine.SoundCache);

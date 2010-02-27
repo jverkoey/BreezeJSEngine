@@ -22,21 +22,20 @@ goog.require('Breeze.Engine');
  * Creating a Texture object will create an Image object, load the data, and then call the optional
  * callback method once the image is loaded.
  *
- * @param path    string     The image URL.
- * @param options dictionary
- *                   - didLoad(texture) method called when the image has been loaded
+ * @param {string}                          path     The image URL.
+ * @param {function(Breeze.Engine.Texture)} didLoad  Called when the image has been loaded.
  * @constructor
  */
-Breeze.Engine.Texture = function(path, options) {
-  var defaults = {
-    'didLoad' : null
-  };
+Breeze.Engine.Texture = function(path, didLoad) {
+  /**
+   * @type {boolean}
+   */
+  this.loaded_ = false;
 
-  var settings = {};
-  goog.object.extend(settings, defaults, options);
-
-  this._loaded = false;
-  this._didLoad = settings.didLoad;
+  /**
+   * @type {function(Breeze.Engine.Texture)}
+   */
+  this.didLoad_ = didLoad;
 
   var img = new Image();
   img.onload = this.didLoadTexture.bind(this);
@@ -48,19 +47,28 @@ Breeze.Engine.Texture = function(path, options) {
 
 Breeze.Engine.Texture.prototype = {
 
+  /**
+   * @return {boolean}
+   */
   isLoaded        : function() {
-    return this._loaded;
+    return this.loaded_;
   },
 
+  /**
+   * @return {Image}
+   */
   getImage        : function() {
     return this._img;
   },
 
+  /**
+   * @param {Image} image
+   */
   didLoadTexture : function(image) {
-    this._loaded = true;
+    this.loaded_ = true;
 
-    if (this._didLoad) {
-      this._didLoad(this);
+    if (this.didLoad_) {
+      this.didLoad_(this);
     }
   }
 

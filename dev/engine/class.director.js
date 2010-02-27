@@ -96,5 +96,3 @@ Breeze.Engine.Director.prototype = {
   }
 
 };
-
-goog.exportSymbol('Breeze.Engine.Director', Breeze.Engine.Director);

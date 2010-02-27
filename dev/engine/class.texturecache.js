@@ -31,18 +31,35 @@ goog.require('Breeze.Engine.Texture');
  * @constructor
  */
 Breeze.Engine.TextureCache = function(texture_info) {
-  this._cache = {};
-  this._requirers = [];
 
+  /**
+   * @type {Object.<string, Breeze.Engine.Texture>}
+   */
+  this.cache_ = {};
+
+  /**
+   * @type {Object.<string, *>}
+   */
+  this.requirers_ = [];
+
+  /**
+   * @type {number}
+   */
   this._numLoaded = 0;
+
+  /**
+   * @type {number}
+   */
   this._numTextures = 0;
 
   for (var key in texture_info) {
     this._numTextures++;
+
+    /**
+     * @type {string}
+     */
     var path = texture_info[key];
-    this._cache[key] = new Breeze.Engine.Texture(path, {
-      didLoad: this.didLoad.bind(this, key)
-    });
+    this.cache_[key] = new Breeze.Engine.Texture(path, this.didLoad.bind(this, key));
   }
 };
 
@@ -54,31 +71,32 @@ Breeze.Engine.TextureCache.prototype = {
    * @param texture   Breeze.Engine.Texture The texture object.
    */
   didLoad : function(key, texture) {
-    var new_requirers = [];
-    for (var i in this._requirers) {
-      var requirer = this._requirers[i];
-      delete requirer.keys[key];
+    var newrequirers = [];
+    for (var i in this.requirers_) {
+      var requirer = this.requirers_[i];
+      delete requirer['keys'][key];
       var isFinished = true;
       for (var keys in requirer.keys) {
         isFinished = false;
         break;
       }
       if (isFinished) {
-        requirer.callback();
+        requirer['callback']();
       } else {
-        new_requirers.push(requirer);
+        newrequirers.push(requirer);
       }
     }
-    this._requirers = new_requirers;
+    this.requirers_ = newrequirers;
     this._numLoaded++;
   },
 
   /**
    * Retrieve a loaded texture object, or null otherwise.
+   * @return {Breeze.Engine.Texture|null}
    */
   getTexture : function(key) {
-    if (this._cache[key].isLoaded()) {
-      return this._cache[key];
+    if (this.cache_[key].isLoaded()) {
+      return this.cache_[key];
     }
 
     return null;
@@ -108,7 +126,7 @@ Breeze.Engine.TextureCache.prototype = {
     }
 
     if (any_missing) {
-      this._requirers.push({
+      this.requirers_.push({
         'keys' : required_keys,
         'callback' : callback
       });
@@ -120,5 +138,3 @@ Breeze.Engine.TextureCache.prototype = {
   }
 
 };
-
-goog.exportSymbol('Breeze.Engine.TextureCache', Breeze.Engine.TextureCache);
