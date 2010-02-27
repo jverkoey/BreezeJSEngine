@@ -32,6 +32,37 @@ Breeze.Math.chopRemainder = function(x) {
 };
 
 /**
+ * Interpolate with an ease in.
+ * @param {number} t
+ * @return {number}
+ */
+Breeze.Math.easeIn = function(t) {
+  return x * x;
+};
+
+/**
+ * Interpolate with an ease out.
+ * @param {number} t
+ * @return {number}
+ */
+Breeze.Math.easeOut = function(t) {
+  return 1 - (t - 1) * (t - 1);
+};
+
+/**
+ * Interpolate with an ease in and out.
+ * @param {number} t
+ * @return {number}
+ */
+Breeze.Math.easeInAndOut = function(t) {
+  if (t < 0.5) {
+    return t * t * 2;   // Identical to (t * 2) * (t * 2) / 2
+  } else {
+    return 1 - (t - 1) * (t - 1) * 2;
+  }
+};
+
+/**
  * Create a 4x4 rotation matrix on the given axis.
  * @param {!number} degreesCCW
  * @param {!string} axis
