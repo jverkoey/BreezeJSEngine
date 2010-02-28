@@ -89,7 +89,7 @@ Breeze.Engine.Scene = function(options) {
   this.timeout_ = null;
 };
 
-Breeze.Engine.Scene.GOAL_FPS = 30; // The desired frames per second.
+Breeze.Engine.Scene.GOAL_FPS = 40; // The desired frames per second.
 Breeze.Engine.Scene.MAX_TIME_DELTA = 50; // The maximum time delta for a given tick.
 
 /**
