@@ -22,16 +22,14 @@ goog.require('goog.math.Matrix');
  * Welcome to Breeze.
  *
  * This library was built with the following dependencies:
- *  - jQuery 1.4.2.
  *  - modernizr 1.1
- *  - jPlayer 1.0.0
  *
  * Created by: Jeff Verkoeyen (jverkoey@gmail.com || @featherless)
  *             February 20, 2010
  *
- * Last time this library was dabbled with: February 22, 2010
+ * Last time this library was dabbled with: February 28, 2010
  *
- * This is the root file required to get working with Breeze.
+ * This is the root file required to create the Breeze namespace.
  */
 var Breeze = {
   arrg : function (iterable) {
@@ -41,6 +39,24 @@ var Breeze = {
     while (length--) results[length] = iterable[length];
     return results;
   }
+};
+
+Breeze.Util = {};
+
+/**
+ * Create an array filled with the given object.
+ *
+ * @param {number} numberOfItems
+ * @param {Object=} opt_value     Default: 0
+ * @return {Array.<Object>}
+ */
+Breeze.Util.filledArray = function(numberOfItems, opt_value) {
+  opt_value = opt_value || 0;
+  var array = [];
+  for (var ix = 0; ix < numberOfItems; ++ix) {
+    array.push(opt_value);
+  }
+  return array;
 };
 
 /**
