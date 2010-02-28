@@ -39,7 +39,7 @@ Breeze.Engine.TextureCache = function(texture_info) {
   this.cache_ = {};
 
   /**
-   * @type {Object.<string, *>}
+   * @type Array.<Breeze.Engine.TextureCache.Requirer>
    * @private
    */
   this.requirers_ = [];
@@ -73,17 +73,23 @@ Breeze.Engine.TextureCache = function(texture_info) {
  * @param texture   Breeze.Engine.Texture The texture object.
  */
 Breeze.Engine.TextureCache.prototype.didLoad = function(key, texture) {
+  /**
+   * @type Array.<Breeze.Engine.TextureCache.Requirer>
+   */
   var newrequirers = [];
   for (var i in this.requirers_) {
+    /**
+     * @type {Breeze.Engine.TextureCache.Requirer}
+     */
     var requirer = this.requirers_[i];
-    delete requirer['keys'][key];
+    delete requirer.keys[key];
     var isFinished = true;
     for (var keys in requirer.keys) {
       isFinished = false;
       break;
     }
     if (isFinished) {
-      requirer['callback']();
+      requirer.callback.call();
     } else {
       newrequirers.push(requirer);
     }
@@ -121,6 +127,9 @@ Breeze.Engine.TextureCache.prototype.getTexture = function(key) {
 Breeze.Engine.TextureCache.prototype.requireTextures = function(keys, callback) {
   var any_missing = false;
 
+  /**
+   * @type {Object.<string, boolean>}
+   */
   var required_keys = {};
   for (var i in keys) {
     var key = keys[i];
@@ -131,13 +140,27 @@ Breeze.Engine.TextureCache.prototype.requireTextures = function(keys, callback) 
   }
 
   if (any_missing) {
-    this.requirers_.push({
-      'keys' : required_keys,
-      'callback' : callback
-    });
+    this.requirers_.push(new Breeze.Engine.TextureCache.Requirer(required_keys, callback));
 
   } else {
     // Everything's already loaded, ship it.
     callback();
   }
+};
+
+/**
+ * @param {Object.<string, boolean>}  keys
+ * @param {function()}                callback
+ * @constructor
+ */
+Breeze.Engine.TextureCache.Requirer = function(keys, callback) {
+  /**
+   * @type {Object.<string, boolean>}
+   */
+  this.keys = keys;
+
+  /**
+   * @type {function()}
+   */
+  this.callback = callback;
 };
