@@ -1,5 +1,7 @@
 
 goog.require('Breeze');
+goog.require('Breeze.StateMachine');
+goog.require('Breeze.Timer');
 goog.require('Breeze.Engine');
 goog.require('Breeze.Engine.Director');
 goog.require('Breeze.Engine.Scene');
