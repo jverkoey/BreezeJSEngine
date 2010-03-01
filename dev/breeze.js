@@ -1,6 +1,7 @@
 
 goog.require('Breeze');
 goog.require('Breeze.Clock');
+goog.require('Breeze.PausableClock');
 goog.require('Breeze.StateMachine');
 goog.require('Breeze.Timer');
 goog.require('Breeze.TimeSource');

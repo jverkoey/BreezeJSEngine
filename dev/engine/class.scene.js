@@ -147,6 +147,8 @@ Breeze.Engine.Scene.prototype.animate = function() {
   this.lastTick_ = currentTick;
 
   Breeze.Engine.Scene.prototype.drawScene.call(this);
+
+  Breeze.Clock.getGlobalClock().frameStep();
 };
 
 /**

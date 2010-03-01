@@ -104,6 +104,13 @@ Breeze.Clock.getGlobalClock = function() {
 };
 
 /**
+ * @param {!Breeze.Clock} clock
+ */
+Breeze.Clock.setGlobalClock = function(clock) {
+  Breeze.Clock.globalClock = clock;
+};
+
+/**
  * @param {Breeze.TimeSource} timeSource
  */
 Breeze.Clock.prototype.setTimeSource = function(timeSource) {
@@ -142,6 +149,20 @@ Breeze.Clock.prototype.getExactTime = function() {
 /**
  * @return {number}
  */
+Breeze.Clock.prototype.getTime = function() {
+  return this.currentTime_;
+};
+
+/**
+ * @return {number}
+ */
+Breeze.Clock.prototype.getFrameDuration = function() {
+  return this.frameDuration_;
+};
+
+/**
+ * @return {number}
+ */
 Breeze.Clock.prototype.getExactLastFrameDuration = function() {
   var sourceTime;
   if (null == this.timeSource_) {
@@ -150,7 +171,7 @@ Breeze.Clock.prototype.getExactLastFrameDuration = function() {
     sourceTime = this.timeSource_.getTime();
   }
 
-  var frameDuration = sourceTime - this.sourceLastValue_;
+  var frameDuration = (sourceTime - this.sourceLastValue_) / 1000;
 
   // If we pause the game to debug, we do not want our time-based algorithms to explode
   if (frameDuration > Breeze.Clock.FRAMEMAX) {
