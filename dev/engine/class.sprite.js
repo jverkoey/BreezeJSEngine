@@ -89,10 +89,10 @@ Breeze.Engine.Sprite = function(options) {
   this.textureFrame_ = 0;
 
   /**
-   * @type {Date}
+   * @type {number}
    * @private
    */
-  this.frameTickStart_ = new Date();
+  this.frameAccum_ = 0;
 
   /**
    * @type {number}
@@ -123,17 +123,19 @@ Breeze.Engine.Sprite.prototype.draw = function(context) {
 
 /**
  * Animate the sprite.
- * @param {number} deltaSeconds
  */
-Breeze.Engine.Sprite.prototype.tick = function(deltaSeconds) {
+Breeze.Engine.Sprite.prototype.tick = function() {
   if (this.currentAnimation_) {
     var animation = this.animations_[this.currentAnimation_];
     var animationFrame = animation.frames[this.animationFrameIndex_];
     var animationTime = animation.times[this.animationFrameIndex_];
     this.textureFrame_ = animationFrame;
-    if ((new Date() - this.frameTickStart_) > animationTime) {
+
+    this.frameAccum_ += Breeze.Clock.getGlobalClock().getFrameDuration();
+
+    if (this.frameAccum_ >= animationTime) {
       this.animationFrameIndex_++;
-      this.frameTickStart_ = new Date();
+      this.frameAccum_ -= animationTime;
 
       // Check for the end of the animation.
       if (this.animationFrameIndex_ == animation.frames.length) {
@@ -155,5 +157,5 @@ Breeze.Engine.Sprite.prototype.setAnimation = function(animation) {
   this.currentAnimation_ = animation;
   this.animationFrameIndex_ = 0;
   this.textureFrame_ = this.animations_[this.currentAnimation_].frames[this.animationFrameIndex_];
-  this.frameTickStart_ = new Date();
+  this.frameAccum_ = 0;
 };

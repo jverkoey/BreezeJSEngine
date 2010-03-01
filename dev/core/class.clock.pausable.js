@@ -21,6 +21,7 @@ goog.require('Breeze.Clock');
 /**
  * @param {Breeze.TimeSource|null} timeSource
  * @constructor
+ * @extends Breeze.Clock
  */
 Breeze.PausableClock = function(timeSource) {
   Breeze.Clock.call(this, timeSource);
@@ -36,5 +37,5 @@ goog.inherits(Breeze.PausableClock, Breeze.Clock);
  * @return {number}
  */
 Breeze.PausableClock.prototype.getFrameDuration = function() {
-  return this.paused_ ? 0 : Breeze.Clock.prototype.call.getFrameDuration(this);
+  return this.paused_ ? 0 : Breeze.Clock.prototype.getFrameDuration.call(this);
 };
