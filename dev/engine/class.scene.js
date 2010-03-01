@@ -65,12 +65,6 @@ Breeze.Engine.Scene = function(options) {
   this.lastLayer_ = 0;
 
   /**
-   * @type {Date}
-   * @private
-   */
-  this.lastTick_ = new Date();
-
-  /**
    * @type {boolean}
    * @private
    */
@@ -90,13 +84,11 @@ Breeze.Engine.Scene = function(options) {
 };
 
 Breeze.Engine.Scene.GOAL_FPS = 40; // The desired frames per second.
-Breeze.Engine.Scene.MAX_TIME_DELTA = 50; // The maximum time delta for a given tick.
 
 /**
  * Kick off the animation timer for the scene.
  */
 Breeze.Engine.Scene.prototype.runScene = function() {
-  this.lastTick_ = new Date();
   this.timeout_ = window.setInterval(
     Breeze.Engine.Scene.prototype.animate.bind(this),
     parseInt(1000 / Breeze.Engine.Scene.GOAL_FPS, 10));
@@ -139,12 +131,7 @@ Breeze.Engine.Scene.prototype.drawScene = function() {
  * Callback for the animation event.
  */
 Breeze.Engine.Scene.prototype.animate = function() {
-  var currentTick = new Date();
-  var deltaMS = Math.min(Breeze.Engine.Scene.MAX_TIME_DELTA, currentTick.getTime() - this.lastTick_);
-
-  this.tick(deltaMS / 1000);
-
-  this.lastTick_ = currentTick;
+  this.tick();
 
   Breeze.Engine.Scene.prototype.drawScene.call(this);
 
