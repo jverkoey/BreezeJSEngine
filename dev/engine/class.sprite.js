@@ -159,3 +159,13 @@ Breeze.Engine.Sprite.prototype.setAnimation = function(animation) {
   this.textureFrame_ = this.animations_[this.currentAnimation_].frames[this.animationFrameIndex_];
   this.frameAccum_ = 0;
 };
+
+Breeze.Engine.Sprite.prototype.forceFinish = function() {
+  if (null != this.currentAnimation_) {
+    var animation = this.animations_[this.currentAnimation_];
+    this.animationFrameIndex_ = animation.frames.length - 1;
+    var animationFrame = animation.frames[this.animationFrameIndex_];
+    this.textureFrame_ = animationFrame;
+    this.currentAnimation_ = null;
+  }
+};
