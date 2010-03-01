@@ -19,9 +19,16 @@ goog.provide('Breeze.Timer');
 goog.require('Breeze');
 
 /**
+ * @param {!Breeze.Clock} clock
  * @constructor
  */
-Breeze.Timer = function() {
+Breeze.Timer = function(clock) {
+  /**
+   * @type {!Breeze.Clock}
+   * @private
+   */
+  this.clock_ = clock;
+
   /**
    * @type {number}
    * @private
@@ -45,6 +52,8 @@ Breeze.Timer = function() {
    * @private
    */
   this.scale_ = 1;
+
+  this.clock_.addObserver(this);
 };
 
 Breeze.Timer.prototype.reset = function() {
@@ -53,12 +62,12 @@ Breeze.Timer.prototype.reset = function() {
 };
 
 /**
- * @param {number} deltaTime
+ *
  */
-Breeze.Timer.prototype.tick = function(deltaTime) {
+Breeze.Timer.prototype.frameDidStep = function() {
   if (!this.isPaused_) {
-    this.frameDuration_ = deltaTime * this.scale_;
-    this.currentTime_ += this.frameDuration_;
+   this.frameDuration_ = this.clock_.getFrameDuration() * this.scale_;
+   this.currentTime_ += this.frameDuration_;
   }
 };
 

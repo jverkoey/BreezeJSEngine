@@ -17,6 +17,7 @@
 goog.provide('Breeze.StateMachine');
 
 goog.require('Breeze');
+goog.require('Breeze.Clock');
 goog.require('Breeze.Timer');
 
 /**
@@ -70,7 +71,7 @@ Breeze.StateMachine = function(states) {
    * @type {!Breeze.Timer}
    * @private
    */
-  this.timer_ = new Breeze.Timer();
+  this.timer_ = new Breeze.Timer(Breeze.Clock.getGlobalClock());
 
   /**
    * @type Array.<Breeze.StateMachine.State>
