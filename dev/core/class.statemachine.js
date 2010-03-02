@@ -128,17 +128,18 @@ Breeze.StateMachine.prototype.init = function(startState, opt_queuedState) {
 };
 
 /**
- * @param {number} newState
- * @param {number} queuedState
+ * @param {number}  newState
+ * @param {number=} opt_queuedState
  */
-Breeze.StateMachine.prototype.transitionTo = function(newState, queuedState) {
+Breeze.StateMachine.prototype.transitionTo = function(newState, opt_queuedState) {
+  opt_queuedState = opt_queuedState || Breeze.StateMachine.ReservedIDs.InvalidID;
   if (this.states_[this.curr_ - Breeze.StateMachine.ReservedIDs.StartID].flags
       & Breeze.StateMachine.Flags.NotifyChildren) {
     // We can't transfer immediately in this case. Let the implementor notify
     //  its children first.
     this.isTransitioning_   = true;
     this.transitionTo_      = newState;
-    this.transitionToQueue_ = queuedState;
+    this.transitionToQueue_ = opt_queuedState;
 
     this.notifier_.notifyChildrenStateChange(newState);
 
@@ -148,7 +149,7 @@ Breeze.StateMachine.prototype.transitionTo = function(newState, queuedState) {
     }
   } else {
     // Otherwise we can transition immediately.
-    if (this.queueStateChange(newState, queuedState)) {
+    if (this.queueStateChange(newState, opt_queuedState)) {
       this.clearTransition();
     }
   }
