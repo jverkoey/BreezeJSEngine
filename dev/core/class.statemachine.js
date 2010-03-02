@@ -249,7 +249,7 @@ Breeze.StateMachine.prototype.tickEnd = function() {
         this.setState(this.transitionTo_);
       }
     }
-  } else {// if( !this.transition_ )
+  } else {// if (!this.transition_)
     // Not transitioning, so let's do the regular state change logic.
     if (this.percent_ >= 1) {
       if (Breeze.StateMachine.ReservedIDs.QueuedID == state.nextState) {

@@ -66,8 +66,8 @@ Breeze.Timer.prototype.reset = function() {
  */
 Breeze.Timer.prototype.frameDidStep = function() {
   if (!this.isPaused_) {
-   this.frameDuration_ = this.clock_.getFrameDuration() * this.scale_;
-   this.currentTime_ += this.frameDuration_;
+    this.frameDuration_ = this.clock_.getFrameDuration() * this.scale_ / 1000;
+    this.currentTime_ += this.frameDuration_;
   }
 };
 
