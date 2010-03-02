@@ -113,10 +113,10 @@ Breeze.StateMachine.prototype.attachNotifier = function(notifier) {
 };
 
 /**
- * @param {number} startState
- * @param {number} queuedState
+ * @param {number}  startState
+ * @param {number=} opt_queuedState
  */
-Breeze.StateMachine.prototype.init = function(startState, queuedState) {
+Breeze.StateMachine.prototype.init = function(startState, opt_queuedState) {
   this.curr_              = Breeze.StateMachine.ReservedIDs.InvalidID;
   this.queued_            = Breeze.StateMachine.ReservedIDs.InvalidID;
   this.isTransitioning_   = false;
@@ -124,7 +124,7 @@ Breeze.StateMachine.prototype.init = function(startState, queuedState) {
   this.transitionToQueue_ = Breeze.StateMachine.ReservedIDs.InvalidID;
   this.timer_.reset();
 
-  this.queueStateChange(startState, queuedState);
+  this.queueStateChange(startState, opt_queuedState || Breeze.StateMachine.ReservedIDs.InvalidID);
 };
 
 /**
