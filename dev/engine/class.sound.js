@@ -40,40 +40,42 @@ Breeze.Engine.Sound = function(path, options) {
    */
   this.loaded_ = false;
 
-  if (Modernizr.audio) {
-    this.audio_ = document.createElement('audio');
+  /**
+   * @type {Object}
+   * @private
+   */
+  this.audio_ = document.createElement('audio');
 
-    if (settings.repeats) {
-      this.audio_.addEventListener("ended", function() {
-        this.audio_.play();
-      }.bind(this), true);
-    }
+  if (settings.repeats) {
+    this.audio_.addEventListener("ended", function() {
+      this.audio_['play']();
+    }.bind(this), true);
+  }
 
-    if (this.audio_.canPlayType('audio/mp3')) {
-      this.audio_.setAttribute('src', path+'.mp3');
-    } else if (this.audio_.canPlayType('audio/ogg')) {
-      this.audio_.setAttribute('src', path+'.ogg');
-    } else {
-      // No supported file formats.
-    }
+  if (this.audio_['canPlayType']('audio/mp3')) {
+    this.audio_.setAttribute('src', path+'.mp3');
+  } else if (this.audio_['canPlayType']('audio/ogg')) {
+    this.audio_.setAttribute('src', path+'.ogg');
+  } else {
+    // No supported file formats.
   }
 };
 
 Breeze.Engine.Sound.prototype.play = function() {
   if (this.audio_) {
-    //this.audio_.play();
+    this.audio_['play']();
   }
 };
 
 Breeze.Engine.Sound.prototype.stop = function() {
   if (this.audio_) {
-    this.audio_.pause();
+    this.audio_['pause']();
   }
 };
 
 Breeze.Engine.Sound.prototype.setVolume = function(perc) {
   if (this.audio_) {
-    this.audio_.volume = perc;
+    this.audio_['volume'] = perc;
   }
 };
 

@@ -116,6 +116,8 @@ Breeze.Engine.Scene.prototype.sound = function(key) {
 Breeze.Engine.Scene.prototype.drawScene = function() {
   this.ctx_.clearRect(0,0,this.ctx_.canvas.width,this.ctx_.canvas.height);
 
+  this.beforeDrawLayers();
+
   for (var i = this.firstLayer_; i <= this.lastLayer_; ++i) {
     var oldAlpha = this.ctx_.globalAlpha;
     var oldFillStyle = this.ctx_.fillStyle;
@@ -125,6 +127,17 @@ Breeze.Engine.Scene.prototype.drawScene = function() {
     this.ctx_.globalAlpha = oldAlpha;
     this.ctx_.fillStyle = oldFillStyle;
   }
+
+  this.afterDrawLayers();
+};
+
+Breeze.Engine.Scene.prototype.beforeDrawLayers = function() {
+};
+
+Breeze.Engine.Scene.prototype.afterDrawLayers = function() {
+};
+
+Breeze.Engine.Scene.prototype.drawLayer = function(level) {
 };
 
 /**
